@@ -13,7 +13,7 @@ def read_root():
 async def generate_text(prompt: str):
     url = "http://localhost:11434/api/generate"
     payload = {
-        "model": "llama3",
+        "model": "mario",
         "prompt": prompt,
         "stream": False,
         "options": {

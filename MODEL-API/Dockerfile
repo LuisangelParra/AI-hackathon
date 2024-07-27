@@ -26,11 +26,13 @@ WORKDIR /app
 # Copy Python script
 COPY app.py .
 
+COPY mario.modelfile .
+
 # Expose Ollama port and FastAPI port
 EXPOSE 11434 8000
 
 # Create a startup script
-RUN echo '#!/bin/bash\nollama serve &\nsleep 10\nollama pull llama3\nuvicorn app:app --host 0.0.0.0 --port 8000' > /app/start.sh && \
+RUN echo '#!/bin/bash\nollama serve &\nsleep 10\nollama create mario --file mario.modelfile\nuvicorn app:app --host 0.0.0.0 --port 8000' > /app/start.sh && \
     chmod +x /app/start.sh
 
 # Set the startup script as the entry point
