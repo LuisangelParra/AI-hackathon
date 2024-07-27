@@ -1,0 +1,15 @@
+services:
+  ollama-fastapi:
+    build: .
+    image: "ollama-fastapi"
+    ports:
+      - "11434:11434"
+      - "8000:8000"
+    develop:
+      watch:
+        - action: sync
+          path: ./
+          target: /app/
+          ignore:
+          - Dockerfile
+          - docker-compose.yml
