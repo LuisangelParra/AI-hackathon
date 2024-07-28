@@ -6,3 +6,7 @@ class Chat(models.Model):
     message = models.TextField()
     response = models.TextField()
     created_at = models.DateTimeField(auto_now_add=True)
+
+class TrainingData(models.Model):
+    prompt = models.TextField()
+    response = models.TextField()
