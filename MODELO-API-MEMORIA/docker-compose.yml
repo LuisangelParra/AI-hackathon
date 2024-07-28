@@ -13,3 +13,8 @@ services:
           ignore:
           - Dockerfile
           - docker-compose.yml
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - capabilities: [gpu]

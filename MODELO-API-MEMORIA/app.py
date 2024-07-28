@@ -22,8 +22,7 @@ class Question(BaseModel):
 
 @app.post("/ask")
 def ask_question(question: Question):
-    # Clear existing memory to handle new conversations
-    # chain.memory.clear()
+
 
     # Load previous messages into the memory if provided
     if question.history:
@@ -41,6 +40,19 @@ def ask_question(question: Question):
     chain.memory.chat_memory.add_ai_message(response["text"])  # Assuming response is a dict with key 'text'
 
     return {"response": response["text"]}  # Return the response text directly
+
+
+
+
+@app.post("/clear")
+def clear_memory():
+    # Clear existing memory to handle new conversations
+    chain.memory.clear()
+
+@app.post("/get_memory")
+def get_memory():
+    # Get the chat history from memory
+    return chain.memory()
 
 if __name__ == "__main__":
     import uvicorn
