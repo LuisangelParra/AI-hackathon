@@ -11,7 +11,7 @@ class Chat(models.Model):
     role = models.TextField()
     content = models.TextField()
     created_at = models.DateTimeField(auto_now_add=True)
-    userchat_macro = models.ForeignKey(UserChatList, on_delete=models.CASCADE, null=True)
+    userchat_macro = models.ForeignKey(UserChatList, on_delete=models.CASCADE)
 
 class TrainingData(models.Model):
     prompt = models.TextField()

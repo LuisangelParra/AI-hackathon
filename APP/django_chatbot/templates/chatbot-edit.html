@@ -1,0 +1,48 @@
+{% extends 'base-chatbot.html' %}
+
+{% block content %}
+<div class="centered-content">
+  <h1 style="font-size: 4rem;" class="p-30 m-0">Chatbot</h1>
+
+  <form id="title-form" method="POST" action="{% url 'chatbot-edit' userchat.id %}" class="prompt" style="flex-direction: column;">
+    {%csrf_token%}
+    <input id="title-input" name="title-input" type="text" placeholder="Ingrese el título..." required>
+    <button id="submitbutton_title" class="button green centered-content">Guardar</button>
+  </form>
+  
+  <div class="p-20 centered-content" style="gap: 20px; flex-direction: row;">        
+    <a href="chatbot-delete" class="button red p-8">
+      <img src="https://www.svgrepo.com/show/502614/delete.svg" style="width: 25px">
+    </a>
+  </div>
+
+</div>
+{% endblock %}
+
+
+{% block scripts %}
+<script>
+  const form_title = document.getElementById("title-form");
+
+  $("#submitbutton_title").on("click", function (event) {
+      event.preventDefault();
+      let btn = $(this);
+
+      btn.prop("disabled", true).addClass("disp");
+
+      //form_title.append("title-input", form_title["title-input"].value);
+      
+      form_title.submit();
+  });
+
+  open_sn = document.getElementById("open-side-nav");
+  close_sn = document.getElementById("close-side-nav");
+  sn = document.getElementById("side-nav");
+
+  function toggleNav() {
+    open_sn.classList.toggle("disp");
+    close_sn.classList.toggle("disp");
+    sn.classList.toggle("show");
+  }
+</script>
+{% endblock %}
