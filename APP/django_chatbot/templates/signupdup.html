@@ -1,0 +1,36 @@
+{% extends 'base.html' %}
+    
+{% block content %}
+<div>
+    <div class="centered-content center-text white h-90 p-20">
+    <h1 style="font-size: 4rem;" class="pb-30 m-0">Crea una cuenta</h1>
+    <form id="signup-form" method="post" action="{% url 'register' %}">
+        {% csrf_token %}
+        <div>
+        <label class="sr-only" for="email">Correo electrónico</label>
+        <input id="email" name="email" type="email" placeholder="Correo electrónico" required 
+        class="form-control" oninvalid="this.setCustomValidity('Debe ingresar un correo válido')"
+        oninput="this.setCustomValidity('')">
+        </div>
+        <div>
+        <label class="sr-only password" for="password">Contraseña</label>
+        <input id="password" name="password" type="password" placeholder="Contraseña" required 
+        class="form-control password" pattern="^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,}$"
+        oninvalid="this.setCustomValidity('Debe ingresar una contraseña válida,\n de al menos 8 caractéres incluyendo\n una letra, un número y un caractér especial.')"
+        oninput="this.setCustomValidity('')">
+        <img id="togglePassword" class="ce" src="https://www.svgrepo.com/show/436161/hide-close-eye-eye.svg">
+        </div>
+        <div>
+            <label class="sr-only" for="password2">Confirme su contraseña</label>
+            <input id="password2" name="password2" type="password" placeholder="Confirme su contraseña" required 
+            class="form-control" pattern="^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,}$"
+            oninvalid="this.setCustomValidity('Debe ingresar una contraseña válida,\n de al menos 8 caractéres incluyendo\n una letra, un número y un caractér especial.')"
+            oninput="this.setCustomValidity('')">
+            </div>
+        <button class="form-control button pop green">Registrarse</button>
+        {% if error_message %}
+            <p class="error-msg">{{ error_message }}</p>
+        {% endif %}
+    </form>
+</div>
+{% endblock %}

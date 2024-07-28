@@ -1,46 +1,84 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render
+from django.http import HttpResponseRedirect
+
 from django.contrib import auth
 from django.contrib.auth.models import User
+from .models import Chat
 
+from django.utils import timezone
+
+def index(request):
+    context = {}
+    return HttpResponseRedirect('/login')
 
 def chatbot(request):
-    return render(request, 'chatbot.html')
+    if not request.user.is_authenticated:
+        return HttpResponseRedirect('/login')
+    
+    chats = Chat.objects.filter(user=request.user)
+    
+    if request.method == 'POST':
+        # checks if cookies are active
+        if request.session.test_cookie_worked():
+            message = request.POST.get('prompt')
+            
+            # get response 
+            response = 'this is a response'
+
+            chat = Chat(
+                user=request.user, 
+                message=message, 
+                response=response, 
+                created_at=timezone.now(),
+            )
+            chat.save()
+            request.session.delete_test_cookie()
+        
+    request.session.set_test_cookie()
+    return render(request, 'chatbot.html', {'chats': chats})
 
 def login(request):
+    if request.user.is_authenticated:
+        return HttpResponseRedirect('/chatbot')
+    
+    context = {}
     if request.method == 'POST':
-        username = request.POST['username']
-        password = request.POST['password']
-        user = auth.authenticate(request, username=username, password=password)
+        # checks user credentials
+        user = auth.authenticate(request, 
+            username=request.POST.get('email').strip(), 
+            password=request.POST.get('password', False),
+        )
+        
         if user is not None:
             auth.login(request, user)
-            return redirect('chatbot')
+            return HttpResponseRedirect('/chatbot')
         else:
-            error_message = 'Invalid username or password'
-            return render(request, 'login.html', {'error_message': error_message})
-    else:
-        return render(request, 'login.html')
+            context = {'error_message': 'Correo o contraseña incorrectos.'}
+    
+    return render(request, 'signindup.html', context)
 
 def register(request):
+    context = {}
     if request.method == 'POST':
-        username = request.POST['username']
-        email = request.POST['email']
-        password1 = request.POST['password1']
-        password2 = request.POST['password2']
-
-        if password1 == password2:
+        # check if passwords match
+        if request.POST['password'] == request.POST['password2']:
+            # check if email is in use, if not add user to db and redirect to signin
             try:
-                user = User.objects.create_user(username, email, password1)
+                user = User.objects.create_user(
+                    request.POST.get('email').strip(), 
+                    request.POST.get('email').strip(), 
+                    request.POST.get('password'), 
+                )
                 user.save()
-                auth.login(request, user)
-                return redirect('chatbot')
-            except:
-                error_message = 'Error creating account'
-                return render(request, 'register.html', {'error_message': error_message})
+                return HttpResponseRedirect('/login')
+            except Exception as e:
+                print(e)
+                context = {'error_message': 'Se ha producido un error.'}
         else:
-            error_message = 'Password dont match'
-            return render(request, 'register.html', {'error_message': error_message})
-    return render(request, 'register.html')
+            context = {'error_message': 'Las contraseñas no coinciden.'}
+    
+    return render(request, 'signupdup.html', context)
 
 def logout(request):
     auth.logout(request)
-    return redirect('login')
+    return HttpResponseRedirect('/login')

@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div>
+    <div class="centered-content center-text white h-90 p-20">
+    <h1 style="font-size: 4rem;" class="pb-30 m-0">Inicia sesión</h1>
+    <form id="signin-form" method="post" action="{% url 'login' %}">
+        {% csrf_token %}
+        <div>
+        <label class="sr-only" for="email">Correo electrónico</label>
+        <input id="email" name="email" type="email" placeholder="Correo electrónico" required 
+        class="form-control">
+        </div>
+        <div>
+        <label class="sr-only password" for="password">Contraseña</label>
+        <input id="password" name="password" type="password" placeholder="Contraseña" required class="form-control password">
+        <img id="togglePassword" class="ce" src="https://www.svgrepo.com/show/436161/hide-close-eye-eye.svg">
+        </div>
+        <button class="form-control button pop green">Acceder</button>
+        {% if error_message %}
+            <p class="error-msg">{{ error_message }}</p>
+        {% endif %}
+    </form>
+</div>
+{% endblock %}
