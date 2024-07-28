@@ -104,12 +104,13 @@
           border-radius: 13px;
           padding: 6px 10px 6px 10px;
           margin: 0 8px 0 8px;
-          flex-shrink: 0;
+          flex-shrink: 1;
+          text-align: center;
       }
       nav a:hover {
           background-color: var(--dark-purple);
       }
-      
+      /*
       @media screen and (max-width: 899px) {
           nav .open-side-nav { display: block; }
           nav { padding-left: 20px; }
@@ -119,7 +120,7 @@
           nav .open-side-nav { display: none; }
           nav { padding-left: 15px; }
           nav a { display: inline; }
-      }
+      }*/
       
       a {
           text-decoration: none;
@@ -215,13 +216,17 @@
           border-radius: 15px;
           border: 3px solid darkgray;
           transition: all 150ms linear;
+          padding: 8px;
       }
       
       form {
           font-family: inherit;
-          width: 50%;
+          width: 80%;
       }
-      
+      @media screen and (min-width: 640px) {
+          form { width: 50%; }
+      }
+
       form div {
           width: 100%;
       }
@@ -265,7 +270,7 @@
           display: flex; 
           flex-direction: column; 
           align-items: center;
-          justify-content: center;
+          /*justify-content: center;*/
       }
       
       .justify-start {
@@ -304,10 +309,6 @@
       
       .purple {
           background-color: var(--purple);
-      }
-      
-      .pink {
-          background-color: var(--pink);
       }
       
       .green {
@@ -392,15 +393,8 @@
             <path d="M15.4991 18.3801C17.0897 18.3801 18.3791 17.0907 18.3791 15.5001C18.3791 13.9095 17.0897 12.6201 15.4991 12.6201C13.9086 12.6201 12.6191 13.9095 12.6191 15.5001C12.6191 17.0907 13.9086 18.3801 15.4991 18.3801Z" fill="#fff"></path> 
           </g>
         </svg>
-      <a>
-      <svg id="open-side-nav" class="open-side-nav" onclick="openNav()" style="height: 24px; width: 24px; padding-left: 20px;" fill="#fff" viewBox="0 -2 28 28" xmlns="http://www.w3.org/2000/svg">
-        <g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
-        <g id="SVGRepo_iconCarrier">
-          <path d="m2.61 0h22.431c1.441 0 2.61 1.168 2.61 2.61s-1.168 2.61-2.61 2.61h-22.431c-1.441 0-2.61-1.168-2.61-2.61s1.168-2.61 2.61-2.61z"></path>
-          <path d="m2.61 9.39h22.431c1.441 0 2.61 1.168 2.61 2.61s-1.168 2.61-2.61 2.61h-22.431c-1.441 0-2.61-1.168-2.61-2.61s1.168-2.61 2.61-2.61z"></path>
-          <path d="m2.61 18.781h22.431c1.441 0 2.61 1.168 2.61 2.61s-1.168 2.61-2.61 2.61h-22.431c-1.441 0-2.61-1.168-2.61-2.61s1.168-2.61 2.61-2.61z"></path>
-        </g>
-      </svg>
+      </a>
+      
       <div class="left-subdiv">
           <a href="/login">Inicia sesión</a>
           <a href="/register" class="light-purple">Crea una cuenta</a>

@@ -1,502 +1,70 @@
-{% load static %}
-<html lang="es">
-  <head>
-    <title>Chatbot</title>
-    <!-- Meta -->
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    
-    <meta name="description" content="Chatbot"> 
-    
-    <!-- App CSS -->  
+{% extends 'base-chatbot.html' %}
 
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Palanquin+Dark:wght@400;500;600;700&display=swap" rel="stylesheet">
+{% block content %}
+  <h1 style="font-size: 4rem;" class="pt-30 m-0">Chatbot</h1>
+  
+  <div class="p-20 centered-content" style="gap: 20px; flex-direction: row;">        
+    <a href="chatbot-delete" class="button red p-8">
+      <img src="https://www.svgrepo.com/show/502614/delete.svg" style="width: 25px">
+    </a>
+    <a href="chatbot-edit" class="button white p-8">
+      <img style="width: 25px" src="https://www.svgrepo.com/show/513824/edit.svg">
+    </a>
+  </div>
+  
+  <div class="chat-container" style="display: flex; flex-direction: column; gap: 10px; display: flex; max-height: 380px; overflow: scroll;">
 
-    <style>
-      :root {
-          --pink: rgb(249, 156, 219);
-          --light-blue: rgb(0, 199, 229);
-          --yellow: rgb(255, 196, 0);
-          --green: rgb(87, 217, 163);
-          --red: rgb(255, 116, 82);
-          --dark-blue: rgb(38, 132, 255);
-          --dark-purple: rgb(64, 45, 154);
-          --purple: rgb(82, 60, 179);
-          --light-purple: rgb(118, 101, 196);
-          --white-accent: rgb(242, 244, 247);
-          --text-color: rgb(18, 31, 70);
-          }
-          /* devanagari */
-          @font-face {
-              font-family: 'Palanquin Dark';
-              font-style: normal;
-              font-weight: 500;
-              font-display: swap;
-              src: url(https://fonts.gstatic.com/s/palanquindark/v14/xn76YHgl1nqmANMB-26xC7yuF8Z6ZV4zd8rv27T5Qcc.woff2) format('woff2');
-              unicode-range: U+0900-097F, U+1CD0-1CF9, U+200C-200D, U+20A8, U+20B9, U+25CC, U+A830-A839, U+A8E0-A8FF;
-          }
-          /* latin-ext */
-          @font-face {
-              font-family: 'Palanquin Dark';
-              font-style: normal;
-              font-weight: 500;
-              font-display: swap;
-              src: url(https://fonts.gstatic.com/s/palanquindark/v14/xn76YHgl1nqmANMB-26xC7yuF8Z6ZV48d8rv27T5Qcc.woff2) format('woff2');
-              unicode-range: U+0100-02AF, U+0304, U+0308, U+0329, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20CF, U+2113, U+2C60-2C7F, U+A720-A7FF;
-          }
-          /* latin */
-          @font-face {
-              font-family: 'Palanquin Dark';
-              font-style: normal;
-              font-weight: 500;
-              font-display: swap;
-              src: url(https://fonts.gstatic.com/s/palanquindark/v14/xn76YHgl1nqmANMB-26xC7yuF8Z6ZV4yd8rv27T5.woff2) format('woff2');
-              unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
-          }
-          /* devanagari */
-          @font-face {
-              font-family: 'Palanquin Dark';
-              font-style: normal;
-              font-weight: 700;
-              font-display: swap;
-              src: url(https://fonts.gstatic.com/s/palanquindark/v14/xn76YHgl1nqmANMB-26xC7yuF8YyY14zd8rv27T5Qcc.woff2) format('woff2');
-              unicode-range: U+0900-097F, U+1CD0-1CF9, U+200C-200D, U+20A8, U+20B9, U+25CC, U+A830-A839, U+A8E0-A8FF;
-          }
-          /* latin-ext */
-          @font-face {
-              font-family: 'Palanquin Dark';
-              font-style: normal;
-              font-weight: 700;
-              font-display: swap;
-              src: url(https://fonts.gstatic.com/s/palanquindark/v14/xn76YHgl1nqmANMB-26xC7yuF8YyY148d8rv27T5Qcc.woff2) format('woff2');
-              unicode-range: U+0100-02AF, U+0304, U+0308, U+0329, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20CF, U+2113, U+2C60-2C7F, U+A720-A7FF;
-          }
-          /* latin */
-          @font-face {
-              font-family: 'Palanquin Dark';
-              font-style: normal;
-              font-weight: 700;
-              font-display: swap;
-              src: url(https://fonts.gstatic.com/s/palanquindark/v14/xn76YHgl1nqmANMB-26xC7yuF8YyY14yd8rv27T5.woff2) format('woff2');
-              unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
-          }
-          
-          body {
-              font-family: 'Palanquin Dark', sans-serif;
-              margin: 0;
-              font-size: 1rem;
-              font-weight: 500;
-              line-height: 1;
-          }
-          
-          nav {
-              background-color: var(--purple);
-              padding: 15px;
-              font-size: 1.2rem;
-              display: flex;
-              align-items: center;
-          }
-          nav a {
-              color: white;
-              border-radius: 13px;
-              padding: 6px 10px 6px 10px;
-              margin: 0 8px 0 8px;
-              flex-shrink: 0;
-          }
-          nav a:hover {
-              background-color: var(--dark-purple);
-          }
-          
-          @media screen and (max-width: 899px) {
-              nav .open-side-nav { display: block; }
-              nav { padding-left: 20px; }
-              nav a { display: none; }
-          }
-          @media screen and (min-width: 900px) {
-              nav .open-side-nav { display: none; }
-              nav { padding-left: 15px; }
-              nav a { display: inline; }
-          }
-          
-          a {
-              text-decoration: none;
-          }
-          
-          button {
-              -webkit-appearance: none;
-              -moz-appearance: none;
-              appearance: none;
-              font-family: inherit;
-              font-size: inherit;
-              border-width: 0px;
-              padding-top: 5px;
-              padding-bottom: 8px;
-              padding-left: 15px;
-              padding-right: 15px;
-          }
-          
-          .left-subdiv {
-              width: 100%; 
-              display: flex; 
-              justify-content: flex-end;
-          }
-          
-          /*******************************/
-          .center-text {
-              text-align: center;
-          }
-          
-          /*******************************/
-          
-          .p-30 {
-              padding: 30px;
-          }
-          
-          .p-20 {
-              padding: 20px;
-          }
-          
-          .pb-30 {
-              padding-bottom: 30px;
-          }
-          
-          .m-0 {
-              margin: 0;
-          }
-          
-          .h-full {
-              height: 100%;
-          }
-
-          .h-90 {
-          height: 90%;
-          }
-          
-          .w-full {
-              width: 100%;
-          }
-          
-          .w-80 {
-              width: 70%;
-          }
-          
-          /*******************************/
-          .sr-only {
-              position: absolute;
-              width: 1px;
-              height: 1px;
-              padding: 0;
-              margin: -1px;
-              overflow: hidden;
-              clip: rect(0,0,0,0);
-              color: #fef6eb;
-          }
-          
-          .show {
-              width: auto;
-              height: auto;
-              padding: 15px 8px;
-              font-size: 0.8rem;
-              clip: auto;
-              color: darkgray;
-          }
-          
-          .form-control {
-              -webkit-appearance: none;
-              -moz-appearance: none;
-              appearance: none;
-              font-size: 1rem;
-              width: 100%;
-              height: 50px; 
-              text-align: center;
-              border-radius: 15px;
-              border: 3px solid darkgray;
-              transition: all 150ms linear;
-          }
-          
-          form {
-              font-family: inherit;
-              width: 50%;
-          }
-          
-          form div {
-              width: 100%;
-          }
-          
-          form input {
-              font-family: inherit;
-              margin-top: 10px;
-          }
-          
-          form button {
-              border: 0;
-              margin-bottom: 10px;
-              margin-top: 20px;
-          }
-          
-          form img {
-              margin-left: -30px;
-              cursor: pointer;
-              width: 10px;
-          }
-          
-          .password {
-              margin-left: -20px;
-          }
-          
-          .ce {
-              src: url('https://www.svgrepo.com/show/436161/hide-close-eye-eye.svg');
-          }
-          
-          .oe {
-              src: url('https://www.svgrepo.com/show/532493/eye.svg');
-          }
-          
-          .error-msg {
-              color: var(--red);
-              margin: 0;
-          }
-          
-          /***************************/
-          .centered-content {
-              display: flex; 
-              flex-direction: column; 
-              align-items: center;
-              justify-content: center;
-          }
-          
-          .justify-start {
-              justify-content: start;
-          }
-          
-          
-          .white-text {
-              color: white;
-          }
-          
-          .button {
-              border-radius: 13px;
-              padding: 10px 15px 10px 15px;
-              border: 0;
-          }
-          .button:hover {
-              opacity: 0.9;
-          }
-          
-          
-          /*******************************/
-          
-          .pop:hover {
-              transform: scale(1.05);
-          }
-          
-          /*******************************/
-          .dark-purple {
-              background-color: var(--dark-purple);
-          }
-          
-          .light-purple {
-              background-color: var(--light-purple);
-          }
-          
-          .purple {
-              background-color: var(--purple);
-          }
-          
-          .pink {
-              background-color: var(--pink);
-          }
-          
-          .green {
-              background-color: var(--green);
-              color: var(--text-color);
-          }
-          
-          .white {
-              background-color: white;
-              color: var(--text-color);
-          }
-          
-          .invisible-input {
-              background-color: transparent;
-              border: 0;
-              margin-top: 0px;
-              line-height: 0.9rem;
-              max-width: 100%;
-          }
-          
-          .prompt {
-              display: flex;
-              gap: 10px;
-              background-color: var(--dark-purple); 
-              padding: 10px; 
-              position: absolute; 
-              bottom: 0;
-          }
-          .prompt input {
-              background-color: var(--purple); 
-              padding: 10px; 
-              border: 0;
-              border-radius: 13px; 
-              font: inherit; 
-              color: white;
-              width: 100%;
-              flex-shrink: 1;
-              height: 50px;
-              margin: 0;
-          }
-          .prompt input::placeholder {
-              color: white;
-          }
-          
-          .prompt button {
-              aspect-ratio: 1 / 1;
-              height: 50px;
-              margin: 0;
-              padding: 0;
-          }
-
-          .prompt img {
-              margin: 0;
-              height: 20px; 
-              width: 20px;
-          }
-          
-          /*******************/
-          .msg {
-              padding: 10px; 
-              border-radius: 12px; 
-              color: var(--text-color);
-          }
-          
-          .msg.chatbot {
-              background-color: white; 
-              text-align: start;
-          }
-          
-          .msg.user {
-              background-color: var(--green); 
-              text-align: end;
-          }    
-    </style>
-
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-  </head>
-  <body class="dark-purple">
-      <nav>
-        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" style="width: 40px;">
-          <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
-          <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
-          <g id="SVGRepo_iconCarrier"> 
-            <path opacity="0.6" d="M2 9.75C1.59 9.75 1.25 9.41 1.25 9V6.5C1.25 3.6 3.61 1.25 6.5 1.25H9C9.41 1.25 9.75 1.59 9.75 2C9.75 2.41 9.41 2.75 9 2.75H6.5C4.43 2.75 2.75 4.43 2.75 6.5V9C2.75 9.41 2.41 9.75 2 9.75Z" fill="#fff"></path> 
-            <path d="M22 9.75C21.59 9.75 21.25 9.41 21.25 9V6.5C21.25 4.43 19.57 2.75 17.5 2.75H15C14.59 2.75 14.25 2.41 14.25 2C14.25 1.59 14.59 1.25 15 1.25H17.5C20.39 1.25 22.75 3.6 22.75 6.5V9C22.75 9.41 22.41 9.75 22 9.75Z" fill="#fff"></path> 
-            <path opacity="0.6" d="M17.5 22.75H16C15.59 22.75 15.25 22.41 15.25 22C15.25 21.59 15.59 21.25 16 21.25H17.5C19.57 21.25 21.25 19.57 21.25 17.5V16C21.25 15.59 21.59 15.25 22 15.25C22.41 15.25 22.75 15.59 22.75 16V17.5C22.75 20.4 20.39 22.75 17.5 22.75Z" fill="#fff"></path> 
-            <path d="M9 22.75H6.5C3.61 22.75 1.25 20.4 1.25 17.5V15C1.25 14.59 1.59 14.25 2 14.25C2.41 14.25 2.75 14.59 2.75 15V17.5C2.75 19.57 4.43 21.25 6.5 21.25H9C9.41 21.25 9.75 21.59 9.75 22C9.75 22.41 9.41 22.75 9 22.75Z" fill="#fff"></path> 
-            <path d="M8.49914 11.3801C10.0897 11.3801 11.3791 10.0907 11.3791 8.50012C11.3791 6.90954 10.0897 5.62012 8.49914 5.62012C6.90856 5.62012 5.61914 6.90954 5.61914 8.50012C5.61914 10.0907 6.90856 11.3801 8.49914 11.3801Z" fill="#fff"></path> 
-            <path opacity="0.6" d="M7.49914 18.3801C8.53744 18.3801 9.37914 17.5384 9.37914 16.5001C9.37914 15.4618 8.53744 14.6201 7.49914 14.6201C6.46085 14.6201 5.61914 15.4618 5.61914 16.5001C5.61914 17.5384 6.46085 18.3801 7.49914 18.3801Z" fill="#fff"></path> 
-            <path opacity="0.6" d="M16.4991 9.38012C17.5374 9.38012 18.3791 8.53841 18.3791 7.50012C18.3791 6.46182 17.5374 5.62012 16.4991 5.62012C15.4608 5.62012 14.6191 6.46182 14.6191 7.50012C14.6191 8.53841 15.4608 9.38012 16.4991 9.38012Z" fill="#fff"></path> 
-            <path d="M15.4991 18.3801C17.0897 18.3801 18.3791 17.0907 18.3791 15.5001C18.3791 13.9095 17.0897 12.6201 15.4991 12.6201C13.9086 12.6201 12.6191 13.9095 12.6191 15.5001C12.6191 17.0907 13.9086 18.3801 15.4991 18.3801Z" fill="#fff"></path> 
-          </g>
-        </svg>
-        <svg id="open-side-nav" class="open-side-nav" onclick="openNav()" style="height: 24px; width: 24px; padding-left: 20px;" fill="#fff" viewBox="0 -2 28 28" xmlns="http://www.w3.org/2000/svg">
-          <g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
-          <g id="SVGRepo_iconCarrier">
-            <path d="m2.61 0h22.431c1.441 0 2.61 1.168 2.61 2.61s-1.168 2.61-2.61 2.61h-22.431c-1.441 0-2.61-1.168-2.61-2.61s1.168-2.61 2.61-2.61z"></path>
-            <path d="m2.61 9.39h22.431c1.441 0 2.61 1.168 2.61 2.61s-1.168 2.61-2.61 2.61h-22.431c-1.441 0-2.61-1.168-2.61-2.61s1.168-2.61 2.61-2.61z"></path>
-            <path d="m2.61 18.781h22.431c1.441 0 2.61 1.168 2.61 2.61s-1.168 2.61-2.61 2.61h-22.431c-1.441 0-2.61-1.168-2.61-2.61s1.168-2.61 2.61-2.61z"></path>
-          </g>
-        </svg>
-        
-        <div class="left-subdiv">
-          
-          <a href="/logout" style="margin: 0; margin: 0; flex-direction: row; gap: 10px" class="centered-content">
-            <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" style="width: 40px; height: 40px;">
-              <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
-              <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
-              <g id="SVGRepo_iconCarrier"> 
-                  <path opacity="0.4" d="M12 22.01C17.5228 22.01 22 17.5329 22 12.01C22 6.48716 17.5228 2.01001 12 2.01001C6.47715 2.01001 2 6.48716 2 12.01C2 17.5329 6.47715 22.01 12 22.01Z" fill="#fff"></path> 
-                  <path d="M12 6.93994C9.93 6.93994 8.25 8.61994 8.25 10.6899C8.25 12.7199 9.84 14.3699 11.95 14.4299C11.98 14.4299 12.02 14.4299 12.04 14.4299C12.06 14.4299 12.09 14.4299 12.11 14.4299C12.12 14.4299 12.13 14.4299 12.13 14.4299C14.15 14.3599 15.74 12.7199 15.75 10.6899C15.75 8.61994 14.07 6.93994 12 6.93994Z" fill="#fff"></path> 
-                  <path d="M18.7807 19.36C17.0007 21 14.6207 22.01 12.0007 22.01C9.3807 22.01 7.0007 21 5.2207 19.36C5.4607 18.45 6.1107 17.62 7.0607 16.98C9.7907 15.16 14.2307 15.16 16.9407 16.98C17.9007 17.62 18.5407 18.45 18.7807 19.36Z" fill="#fff"></path> 
-              </g>
-            </svg>
-            <span>Logout</span>
-          </a>
+    {% for chat in chats %}
+      {% if chat.role == 'user' %}
+        <div class="msg user" >
+          {{ chat.content }}
         </div>
-      </nav>
-
-      <div class="centered-content white-text center-text justify-start">
-        <div class="w-80">
-          <h1 style="font-size: 4rem;" class="p-30 m-0">Chatbot</h1>
-          <div class="chat-container" style="display: flex; flex-direction: column; gap: 10px; display: flex; max-height: 380px; overflow: scroll;">
-
-            {% for chat in chats %}
-              {% if chat.role == 'user' %}
-                <div class="msg user" >
-                  {{ chat.content }}
-                </div>
-              {% else %}
-                <div class="msg chatbot">
-                  {{ chat.content }}
-                </div>
-              {% endif %}
-            {% endfor %}
-            <div id="anchor"></div>
-          </div>
+      {% else %}
+        <div class="msg chatbot">
+          {{ chat.content }}
         </div>
-        <form id="prompt-form" class="w-80 prompt" method="POST" action="{% url 'chatbot'%}">
-          {%csrf_token%}
-          <label for="prompt" class="sr-only">Prompt</label>
-          <input id="prompt" name="prompt" type="text" class="button" placeholder="Escribe al chatbot...">
-          <button id="submit" style="aspect-ratio: 1/1;" class="button p-0">
-            <img src="https://www.svgrepo.com/show/533310/send-alt-1.svg">
-          </button>
-        </form>
-      </div>
+      {% endif %}
+    {% endfor %}
+  </div>
+</div>
+<div id="prompt-container" class="dark-purple w-full prompt-container">
+  <form id="prompt-form" class="w-80 prompt" method="POST" action="{% url 'chatbot' userchat.id %}">
+    {%csrf_token%}
+    <label for="prompt" class="sr-only">Prompt</label>
+    <input id="prompt" name="prompt" type="text" class="button" placeholder="Escribe al chatbot...">
+    <button id="submitbutton" style="aspect-ratio: 1/1;" class="button p-0">
+      <img src="https://www.svgrepo.com/show/533310/send-alt-1.svg">
+    </button>
+  </form>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+  cc = document.getElementsByClassName("chat-container")[0];
+  cc.scrollTop = cc.scrollHeight;
+
+  open_sn = document.getElementById("open-side-nav");
+  close_sn = document.getElementById("close-side-nav");
+  sn = document.getElementById("side-nav");
+  prompt_cont = document.getElementById("prompt-container");
+
+  function toggleNav() {
+    prompt_cont.classList.toggle("disp");
+    open_sn.classList.toggle("disp");
+    close_sn.classList.toggle("disp");
+    sn.classList.toggle("show");
+  }
+
+  const form = document.getElementById("prompt-form");
+  
+  $("#submitbutton").on("click", function (event) {
+      event.preventDefault();
+      let btn = $(this);
+
+      btn.prop("disabled", true).addClass("disp");
       
-      <script>
-        cc = document.getElementsByClassName("chat-container")[0];
-        cc.scrollTop = cc.scrollHeight;
-        /*
-        const form = document.getElementById("prompt-form");
-
-        $("#submit").on("click", function (event) {
-            event.preventDefault();
-            let btn = $(this);
-            let input = $("#prompt");
-
-            //input.html("Creando presupuesto...")
-            btn.prop("disabled", true); //.addClass("disable-btn");
-            console.log("disabled button");
-            
-            let formData = new FormData(form);
-            for(let [name, value] of formData) {
-                console.log(`${name} = ${value}`); // key1 = value1, luego key2 = value2
-            }
-            
-            $.ajax({
-                url: "/chatbot",
-                method: "POST",
-                data: formData,
-                dataType: "json",
-                success: function (response) {
-                    console.log('success function');
-                    btn.prop("disabled", false);
-                    
-                },
-                error: function (error) {
-                    console.log(error)
-                    console.log('error function')
-                    
-                    btn.prop("disabled", false);
-                },
-                cache: false,
-                processData: false,
-                contentType: false,
-            });
-        });*/
-      </script>
-    </body>
-</html>
+      form.submit();
+  });
+</script>
+{% endblock %}
