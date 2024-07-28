@@ -1,7 +1,7 @@
 {% load static %}
 <html lang="es">
   <head>
-    <title>Presupuestos</title>
+    <title>Chatbot</title>
     <!-- Meta -->
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -433,14 +433,15 @@
           <div class="chat-container" style="display: flex; flex-direction: column; gap: 10px; display: flex; max-height: 380px; overflow: scroll;">
 
             {% for chat in chats %}
-              {% if chat.message %}
+              {% if chat.role == 'user' %}
                 <div class="msg user" >
-                  {{ chat.message }}
+                  {{ chat.content }}
+                </div>
+              {% else %}
+                <div class="msg chatbot">
+                  {{ chat.content }}
                 </div>
               {% endif %}
-              <div class="msg chatbot">
-                {{ chat.response }}
-              </div>
             {% endfor %}
             <div id="anchor"></div>
           </div>

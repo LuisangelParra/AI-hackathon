@@ -7,6 +7,16 @@ from .models import Chat
 
 from django.utils import timezone
 
+import requests
+import json
+
+def get_response(context):
+    print("\n\ngetting response")
+    
+    response = requests.post("https://c454-181-63-26-23.ngrok-free.app/ask", json=context)
+    
+    return response.json()['response']
+
 def index(request):
     context = {}
     return HttpResponseRedirect('/login')
@@ -15,26 +25,36 @@ def chatbot(request):
     if not request.user.is_authenticated:
         return HttpResponseRedirect('/login')
     
-    chats = Chat.objects.filter(user=request.user)
+    chats = [c for c in Chat.objects.filter(user=request.user)]
     
     if request.method == 'POST':
-        # checks if cookies are active
-        if request.session.test_cookie_worked():
-            message = request.POST.get('prompt')
-            
-            # get response 
-            response = 'this is a response'
-
-            chat = Chat(
-                user=request.user, 
-                message=message, 
-                response=response, 
-                created_at=timezone.now(),
-            )
-            chat.save()
-            request.session.delete_test_cookie()
+        message = request.POST.get('prompt')
         
-    request.session.set_test_cookie()
+        fc = timezone.now()
+        
+        history = [{"role": c.role, "content": c.content} for c in chats]
+        # get response 
+        response = get_response({"content": message, "history": []})
+        print(response)
+        
+        chat = Chat(
+            user=request.user, 
+            role="user", 
+            content=message, 
+            created_at=fc,
+        )
+        chat.save()
+        chats.append(chat)
+        
+        chat = Chat(
+            user=request.user, 
+            role="assistant", 
+            content=response, 
+            created_at=timezone.now(),
+        )
+        chat.save()
+        chats.append(chat)
+    
     return render(request, 'chatbot.html', {'chats': chats})
 
 def login(request):
