@@ -3,29 +3,42 @@ from django.http import HttpResponseRedirect
 
 from django.contrib import auth
 from django.contrib.auth.models import User
-from .models import Chat
+from .models import Chat, UserChatList
 
 from django.utils import timezone
 
 import requests
-import json
+
+USERCHAT_LIST = []
 
 def get_response(context):
-    print("\n\ngetting response")
-    
     response = requests.post("https://c454-181-63-26-23.ngrok-free.app/ask", json=context)
-    
     return response.json()['response']
 
 def index(request):
-    context = {}
     return HttpResponseRedirect('/login')
 
-def chatbot(request):
+def newchat(request):
+    userchat = UserChatList(
+        user=request.user,
+        title='Nuevo Chat',
+        created_at=timezone.now(),
+    )
+    userchat.save()
+    
+    USERCHAT_LIST = UserChatList.objects.filter(user=request.user)
+    return HttpResponseRedirect(f'{userchat.id}/chatbot')
+    
+def chatbot(request, userchat_id):
     if not request.user.is_authenticated:
         return HttpResponseRedirect('/login')
     
-    chats = [c for c in Chat.objects.filter(user=request.user)]
+    try:
+        current_chat = USERCHAT_LIST.get(pk=userchat_id)
+    except: # chat does not exist; redirects to new chat
+        return HttpResponseRedirect('/newchat')
+    
+    chats = [c for c in Chat.objects.filter(userchat_macro=current_chat)]
     
     if request.method == 'POST':
         message = request.POST.get('prompt')
@@ -34,14 +47,15 @@ def chatbot(request):
         
         history = [{"role": c.role, "content": c.content} for c in chats]
         # get response 
+        # TODO: REVISAR SI MANDAR HISTORIAL
         response = get_response({"content": message, "history": []})
-        print(response)
         
         chat = Chat(
             user=request.user, 
             role="user", 
             content=message, 
             created_at=fc,
+            userchat_macro=current_chat,
         )
         chat.save()
         chats.append(chat)
@@ -51,15 +65,24 @@ def chatbot(request):
             role="assistant", 
             content=response, 
             created_at=timezone.now(),
+            userchat_macro=current_chat,
         )
         chat.save()
         chats.append(chat)
     
-    return render(request, 'chatbot.html', {'chats': chats})
+    return render(
+        request, 
+        'chatbot.html', 
+        {'chats': chats, 'userchat': current_chat, 'userchat_list': USERCHAT_LIST},
+    )
 
 def login(request):
     if request.user.is_authenticated:
-        return HttpResponseRedirect('/chatbot')
+        USERCHAT_LIST = UserChatList.objects.filter(user=request.user)
+        if len(USERCHAT_LIST) == 0:
+            return HttpResponseRedirect('/newchat')
+        else:
+            return HttpResponseRedirect(f'{[c for c in USERCHAT_LIST][-1].id}/chatbot')
     
     context = {}
     if request.method == 'POST':
@@ -71,7 +94,11 @@ def login(request):
         
         if user is not None:
             auth.login(request, user)
-            return HttpResponseRedirect('/chatbot')
+            USERCHAT_LIST = UserChatList.objects.filter(user=request.user)
+            if len(USERCHAT_LIST) == 0:
+                return HttpResponseRedirect('/newchat')
+            else:
+                return HttpResponseRedirect(f'{[c for c in USERCHAT_LIST][-1].id}/chatbot')
         else:
             context = {'error_message': 'Correo o contraseña incorrectos.'}
     
