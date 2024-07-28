@@ -18,15 +18,17 @@ RUN python3 -m venv $VIRTUAL_ENV
 ENV PATH="$VIRTUAL_ENV/bin:$PATH"
 
 # Install Python dependencies in the virtual environment
-RUN pip install fastapi uvicorn requests
+RUN pip install fastapi uvicorn requests langchain_core langchain_community langchain
 
 # Set working directory
 WORKDIR /app
 
 # Copy Python script
 COPY app.py .
-
-COPY mario.modelfile .
+COPY llm.py .
+COPY chain.py .
+COPY memory.py .
+COPY prompt.py .
 
 # Expose Ollama port and FastAPI port
 EXPOSE 11434 8000

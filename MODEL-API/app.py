@@ -3,7 +3,6 @@ import requests
 import json
 import time
 
-
 app = FastAPI()
 
 @app.get("/")
