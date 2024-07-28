@@ -119,7 +119,6 @@ def register(request):
                 user.save()
                 return HttpResponseRedirect('/login')
             except Exception as e:
-                print(e)
                 context = {'error_message': 'Se ha producido un error.'}
         else:
             context = {'error_message': 'Las contraseñas no coinciden.'}
