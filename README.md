@@ -3,10 +3,10 @@
 ## Módulos
 
 ### Definición de los procesos e integración del modelo de lenguaje
-Con ayuda de librerías de LLM en Python, se creó un modelo utilizando LLAMa 3.1 que toma como contexto su rol de chatbot en la empresa.
+Con ayuda de librerías de LLM en Python, se creó un modelo utilizando LLaMa 3.1 que toma como contexto su rol de chatbot en la empresa y la información relevante de la misma.
 
 ### Alimentación de información
-El chatbot fue alimentado con datos de los procesos del departamento de Administración de la Universidad del Norte, extraídos de la página web oficial por medio de web scrapping y pulidos con ayuda de modelos de lenguaje como ChatGPT para darles un formato más amigable. De allí, los datos se organizaron en una tabla con columnas "Prompt" y "Respuesta". Estos se encuentran en una tabla de una base de datos Postgresql en Neon Tech, creada para el proyecto.
+El chatbot fue alimentado con datos de los procesos del departamento de Administración de la Universidad del Norte, extraídos de la página web oficial por medio de web scrapping y pulidos con ayuda de modelos de lenguaje como ChatGPT para darles un formato más amigable. De allí, los datos se organizaron en una tabla con columnas "Prompt" y "Respuesta". Estos se encuentran en una tabla de una base de datos Postgresql en Neon Tech, creada para el proyecto. Asimismo, el texto de la página organizado está almacenado en un archivo txt.
 
 ### Implementación del Chatbot
 La interfaz de usuario buscó ser amigable e intuitiva, haciendo uso de íconos distintivos para denotar las distintas funcionalidades. En busca de esta comodidad del usuario, se añadieron las siguientes funciones adicionales al chatbot:
@@ -21,7 +21,7 @@ La interfaz de usuario buscó ser amigable e intuitiva, haciendo uso de íconos 
 - Python - Django
 - HTML, CSS, Javascript
 - Postgresql - Neon Tech
-- LLAMa 3.1
+- LLaMa 3.1
 
 ## Referencias y créditos
 
