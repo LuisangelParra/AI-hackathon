@@ -1,5 +1,5 @@
 # Start with Ubuntu base image
-FROM ubuntu:latest
+FROM nvidia/cuda:11.8.0-base-ubuntu22.04
 
 # Install necessary packages
 RUN apt-get update && apt-get install -y \
