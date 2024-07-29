@@ -1,11 +1,18 @@
-from unsloth import FastLanguageModel
 import torch
+print("Torch version:",torch.__version__)
+print("Is CUDA enabled?",torch.cuda.is_available())
+
+
+from unsloth import FastLanguageModel
+
 import os
 from transformers import TextStreamer
 from datasets import load_dataset
+from trl import SFTTrainer
 from transformers import TrainingArguments
 from unsloth import is_bfloat16_supported
 import numpy as np
+
 
 # 1. Configuración
 max_seq_length = 2048
@@ -59,15 +66,15 @@ df_test.to_csv('test_set.csv', index=False)
 
 EOS_TOKEN = tokenizer.eos_token
 def formatting_prompts_func(examples):
-    preguntas = examples["pregunta"]
-    respuestas = examples["respuesta"]
+    preguntas = examples["Pregunta"]
+    respuestas = examples["Respuesta"]
     texts = []
     for pregunta, respuesta in zip(preguntas, respuestas):
         text = alpaca_prompt.format(pregunta, respuesta) + EOS_TOKEN
-        text.append(text)
+        texts.append(text)
     return {"text": texts}
 pass
-dataset = load_dataset("csv",  data_files={'train': "train_set.csv",'test': "test_set.csv"})
+dataset = load_dataset("csv",  data_files={'train': "train_set.csv",'test': "test_set.csv"}, split = "train")
 dataset = dataset.map(formatting_prompts_func, batched=True)
 
 # 4. Training
