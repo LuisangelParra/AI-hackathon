@@ -12,7 +12,7 @@ import requests
 USERCHAT_LIST = None
 
 def get_response(context):
-    response = requests.post("https://c454-181-63-26-23.ngrok-free.app/ask", json=context)
+    response = requests.post("https://2ae0-181-63-26-23.ngrok-free.app/ask", json=context)
     return response.json()['response']
 
 def index(request):
@@ -58,6 +58,8 @@ def chatbot_delete(request, userchat_id):
         current_chat.delete()
         
         USERCHAT_LIST = UserChatList.objects.filter(user=request.user)
+        if len(USERCHAT_LIST) == 0:
+            return HttpResponseRedirect('/newchat')
     except:
         pass
     
@@ -83,7 +85,10 @@ def chatbot_edit(request, url_id):
         current_chat = USERCHAT_LIST.get(pk=url_id)
     except Exception as e:
         # else, redirects to last chat
-        return HttpResponseRedirect(f'/{[c for c in USERCHAT_LIST][-1].id}/chatbot')
+        if len(USERCHAT_LIST) == 0:
+            return HttpResponseRedirect('/newchat')
+        else:
+            return HttpResponseRedirect(f'/{[c for c in USERCHAT_LIST][-1].id}/chatbot')
     
     if request.method == 'POST':
         # changes title and redirects to chat
@@ -114,7 +119,10 @@ def chatbot(request, userchat_id):
     try:
         current_chat = USERCHAT_LIST.get(pk=userchat_id)
     except: # chat does not exist; redirects to last chat
-        return HttpResponseRedirect(f'/{[c for c in USERCHAT_LIST][-1].id}/chatbot')
+        if len(USERCHAT_LIST) == 0:
+            return HttpResponseRedirect('/newchat')
+        else:
+            return HttpResponseRedirect(f'/{[c for c in USERCHAT_LIST][-1].id}/chatbot')
     
     chats = [c for c in Chat.objects.filter(userchat_macro=current_chat)]
     
@@ -124,6 +132,7 @@ def chatbot(request, userchat_id):
         fc = timezone.now()
         
         history = [{"role": c.role, "content": c.content} for c in chats]
+        
         # get response 
         # TODO: REVISAR SI MANDAR HISTORIAL; LA SIGUIENTE ES LA LÍNEA QUE GENERA LA RESPUESTA
         response = get_response({"content": message, "history": []})
